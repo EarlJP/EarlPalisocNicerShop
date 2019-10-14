@@ -1,8 +1,5 @@
 package com.earljaepal.palisocnicershop.model;
 
-import android.graphics.drawable.Drawable;
-import android.widget.Button;
-
 public class ItemShop {
     private String mItemTitle;
     private int mItemImage;

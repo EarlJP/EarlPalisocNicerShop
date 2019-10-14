@@ -10,6 +10,7 @@ import android.view.View;
 import com.earljaepal.palisocnicershop.model.ItemShop;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 public class MenuActivity extends AppCompatActivity {
@@ -19,7 +20,7 @@ public class MenuActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE =
             "com.earljaepal.palisocshop.extra.MESSAGE";
 
-    private List mItems;
+    private final LinkedList<ItemShop> mItems = new LinkedList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,9 +38,6 @@ public class MenuActivity extends AppCompatActivity {
             }
         });
 
-
-
-        mItems = new ArrayList<ItemShop>();
         ItemShop item1 = new ItemShop(getResources().getString(R.string.item1_name),
                 R.drawable.mach_bike,
                 getResources().getString(R.string.item1_price),
