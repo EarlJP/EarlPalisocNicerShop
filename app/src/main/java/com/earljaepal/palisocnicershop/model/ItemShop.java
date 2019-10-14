@@ -1,6 +1,11 @@
 package com.earljaepal.palisocnicershop.model;
 
-public class ItemShop {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import java.io.Serializable;
+
+public class ItemShop implements Parcelable {
     private String mItemTitle;
     private int mItemImage;
     private String mItemPrice;
@@ -107,5 +112,48 @@ public class ItemShop {
 
     public void setmInitialSubtotal(String mInitialSubtotal) {
         this.mInitialSubtotal = mInitialSubtotal;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(this.mItemTitle);
+        parcel.writeInt(this.mItemImage);
+        parcel.writeString(this.mItemPrice);
+        parcel.writeString(this.mItemDescription);
+        parcel.writeString(this.mQuantityTitle);
+        parcel.writeString(this.mRemoveButton);
+        parcel.writeString(this.mItemQuantity);
+        parcel.writeString(this.mAddButton);
+        parcel.writeString(this.mSubtotalTitle);
+        parcel.writeString(this.mInitialSubtotal);
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public ItemShop createFromParcel(Parcel in) {
+            return new ItemShop(in);
+        }
+
+        public ItemShop[] newArray(int size) {
+            return new ItemShop[size];
+        }
+    };
+
+    // Parcelling part
+    public ItemShop(Parcel in){
+        this.mItemTitle = in.readString();
+        this.mItemImage = in.readInt();
+        this.mItemPrice = in.readString();
+        this.mItemDescription = in.readString();
+        this.mQuantityTitle = in.readString();
+        this.mRemoveButton = in.readString();
+        this.mItemQuantity = in.readString();
+        this.mAddButton = in.readString();
+        this.mSubtotalTitle = in.readString();
+        this.mInitialSubtotal = in.readString();
     }
 }

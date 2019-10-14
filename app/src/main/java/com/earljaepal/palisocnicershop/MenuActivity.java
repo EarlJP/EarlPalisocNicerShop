@@ -1,9 +1,12 @@
 package com.earljaepal.palisocnicershop;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
@@ -20,7 +23,11 @@ public class MenuActivity extends AppCompatActivity {
     public static final String EXTRA_MESSAGE =
             "com.earljaepal.palisocshop.extra.MESSAGE";
 
-    private final LinkedList<ItemShop> mItems = new LinkedList<>();
+    private static final String CURRENT_ITEMS = "current items";
+
+    private ArrayList<ItemShop> mItems = new ArrayList<>();
+    private RecyclerView mRecyclerView;
+    private ProductAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,6 +86,25 @@ public class MenuActivity extends AppCompatActivity {
         );
 
         mItems.add(item3);
+
+        // Get a handle to the RecyclerView.
+        mRecyclerView = findViewById(R.id.recyclerview);
+        // Create an adapter and supply the data to be displayed.
+        mAdapter = new ProductAdapter(this, mItems);
+        // Connect the adapter with the RecyclerView.
+        mRecyclerView.setAdapter(mAdapter);
+        // Give the RecyclerView a default layout manager.
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+
+        if (savedInstanceState != null) {
+            mItems = savedInstanceState.getParcelableArrayList(CURRENT_ITEMS);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putParcelableArrayList("CURRENT_ITEMS", mItems);
     }
 
 }
