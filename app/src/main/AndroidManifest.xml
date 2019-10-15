@@ -12,14 +12,17 @@
         <activity
             android:name=".MenuActivity"
             android:label="@string/title_activity_menu"
-            android:theme="@style/AppTheme.NoActionBar">
-
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".MainActivity"
+            android:configChanges="orientation|screenSize">
+            <meta-data
+                android:name="android.support.MAIN_ACTIVITY"
+                android:value="com.earljaepal.palisocshop"/>
         </activity>
 
         <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

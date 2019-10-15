@@ -14,7 +14,6 @@ import android.widget.TextView;
 import com.earljaepal.palisocnicershop.model.ItemShop;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.
         ProductViewHolder> {
@@ -127,6 +126,8 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.
                     Log.d(LOG_TAG, "Update the quantity:  " + clickedItem.getmItemTitle() + ", "
                             + clickedItem.getmItemPrice());
                     break;
+
+                default :
             }
 
             mItemList.set(mPosition, clickedItem);

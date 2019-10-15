@@ -6,11 +6,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.TextView;
 
+import com.earljaepal.palisocnicershop.model.ItemShop;
+
+import java.util.ArrayList;
+
 public class CheckoutActivity extends AppCompatActivity {
 
     private static final String LOG_TAG =
             MenuActivity.class.getSimpleName();
 
+    private ArrayList<ItemShop> mItems;
     private static final double TPS = 0.05;
     private static final double TVQ = 0.09975;
 
@@ -25,15 +30,48 @@ public class CheckoutActivity extends AppCompatActivity {
 
         // Get the total from the previous menu activity
         Intent intent = getIntent();
-        String stringTotal = (intent.getStringExtra(MenuActivity.EXTRA_MESSAGE)).substring(1);
+        String deliveryOption = (intent.getStringExtra(MenuActivity.EXTRA_MESSAGE));
+        mItems = (intent.getParcelableArrayListExtra(MenuActivity.EXTRA_MESSAGE2));
+
         // Set the total before taxes with this intent
         TextView setTotal = findViewById(R.id.pretotal);
+        TextView setDelivery = findViewById(R.id.delivery_option);
 
-        Log.d(LOG_TAG, "Check the intent:  " + stringTotal);
+        setDelivery.setText(deliveryOption);
+        Log.d(LOG_TAG, "Check the intent:  " + deliveryOption);
 
-        setTotal.setText("$" + stringTotal);
+        double subtotal = calculateSubTotal();
+        setTotal.setText("$" + subtotal);
 
+        String stringTotal = calculatePreTotal(deliveryOption, subtotal);
         calculateTotal(stringTotal);
+    }
+
+    public double calculateSubTotal() {
+        double subtotal = 0;
+
+        for (int i = 0; i < mItems.size(); i++)
+            subtotal += Double.parseDouble(mItems.get(i).getmInitialSubtotal());
+
+        return subtotal;
+    }
+
+    public String calculatePreTotal(String option, double total) {
+        final double expressDelivery = 50;
+        final double regularDelivery = 10;
+
+        switch (option) {
+            case "Express ($50)":
+                total += expressDelivery;
+                break;
+            case "Regular ($10)":
+                total += regularDelivery;
+                break;
+            case "No hurry (FREE)":
+                total += 0;
+        }
+        Log.d(LOG_TAG, "Check the total:  " + total);
+        return Double.toString(total);
     }
 
     /**
