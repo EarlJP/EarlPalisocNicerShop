@@ -3,7 +3,6 @@ package com.earljaepal.palisocnicershop;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
@@ -12,13 +11,14 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.earljaepal.palisocnicershop.model.ItemShop;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 
 public class MenuActivity extends AppCompatActivity {
     private static final String LOG_TAG =
@@ -32,10 +32,12 @@ public class MenuActivity extends AppCompatActivity {
 
     private static final String CURRENT_ITEMS = "current items";
 
+    private static final String NO_DELIVERY = "Please choose a delivery option";
+
     private ArrayList<ItemShop> mItems = new ArrayList<>();
     private RecyclerView mRecyclerView;
     private ProductAdapter mAdapter;
-    private int selectedOption;
+    private int selectedOption = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +52,9 @@ public class MenuActivity extends AppCompatActivity {
             public void onClick(View view) {
                 AlertDialog.Builder shippingAlert = new AlertDialog.Builder(MenuActivity.this);
 
-                // Set the dialog title and message.
+                // Set the dialog title
                 shippingAlert.setTitle("View Cart");
+                // Set clickable choices, radio button format
                 shippingAlert.setSingleChoiceItems(getResources().getStringArray(R.array.delivery_choice), -1,
                         new DialogInterface.OnClickListener() {
                             @Override
@@ -63,27 +66,48 @@ public class MenuActivity extends AppCompatActivity {
                 shippingAlert.setPositiveButton(R.string.ok, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        // User clicked OK, so add the selected option cost to the total
-                        Intent checkout = new Intent(MenuActivity.this, CheckoutActivity.class);
-                        String [] options = getResources().getStringArray(R.array.delivery_choice);
-                        String option = options[selectedOption];
-                        checkout.putExtra(EXTRA_MESSAGE, option);
+                        // Check if the user actually chooses a delivery option
+                        if (selectedOption != -1) {
+                            // User clicked Checkout, launch checkout activity
+                            Intent checkout = new Intent(MenuActivity.this, CheckoutActivity.class);
+                            // Send selected delivery option to the next activity
+                            String[] options = getResources().getStringArray(R.array.delivery_choice);
+                            String option = options[selectedOption];
+                            checkout.putExtra(EXTRA_MESSAGE, option);
+                            // Send list of shop items as a parcelable list
+                            checkout.putParcelableArrayListExtra(EXTRA_MESSAGE2, mItems);
+                            // Reinitialize option to a default
+                            selectedOption = -1;
 
-                        checkout.putParcelableArrayListExtra(EXTRA_MESSAGE2, mItems);
-                        startActivity(checkout);
-                        Log.d(LOG_TAG, "Proceed to checkout");
+                            startActivity(checkout);
+                            Log.d(LOG_TAG, "Proceed to checkout");
+                        }
+                        else {
+                            // Send a popup message
+                            Toast.makeText(MenuActivity.this, NO_DELIVERY, Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 shippingAlert.setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int id) {
-                        // or return them to the component that opened the dialog
+                        // Go back to shopping
+                        selectedOption = 3;
                     }
                 });
 
                 shippingAlert.show();
             }
         });
+
+        // Get a handle to the RecyclerView.
+        mRecyclerView = findViewById(R.id.recyclerview);
+        // Create an adapter and supply the data to be displayed.
+        mAdapter = new ProductAdapter(this, mItems);
+        // Connect the adapter with the RecyclerView.
+        mRecyclerView.setAdapter(mAdapter);
+        // Give the RecyclerView a default layout manager.
+        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         ItemShop item1 = new ItemShop(getResources().getString(R.string.item1_name),
                 R.drawable.mach_bike,
@@ -127,15 +151,6 @@ public class MenuActivity extends AppCompatActivity {
 
         mItems.add(item3);
 
-        // Get a handle to the RecyclerView.
-        mRecyclerView = findViewById(R.id.recyclerview);
-        // Create an adapter and supply the data to be displayed.
-        mAdapter = new ProductAdapter(this, mItems);
-        // Connect the adapter with the RecyclerView.
-        mRecyclerView.setAdapter(mAdapter);
-        // Give the RecyclerView a default layout manager.
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-
         if (savedInstanceState != null) {
             mItems = savedInstanceState.getParcelableArrayList(CURRENT_ITEMS);
         }
@@ -146,6 +161,4 @@ public class MenuActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList("CURRENT_ITEMS", mItems);
     }
-
-
 }

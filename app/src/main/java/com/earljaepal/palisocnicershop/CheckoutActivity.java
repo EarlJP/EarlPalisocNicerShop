@@ -47,15 +47,26 @@ public class CheckoutActivity extends AppCompatActivity {
         calculateTotal(stringTotal);
     }
 
+    /**
+     * Calculate the all the subtotals of the items ordered
+     * @return
+     */
     public double calculateSubTotal() {
         double subtotal = 0;
 
+        // Loop through the list of items and add the subtotals up
         for (int i = 0; i < mItems.size(); i++)
             subtotal += Double.parseDouble(mItems.get(i).getmInitialSubtotal());
 
         return subtotal;
     }
 
+    /**
+     * Calculate the total with the chosen delivery option
+     * @param option
+     * @param total
+     * @return
+     */
     public String calculatePreTotal(String option, double total) {
         final double expressDelivery = 50;
         final double regularDelivery = 10;

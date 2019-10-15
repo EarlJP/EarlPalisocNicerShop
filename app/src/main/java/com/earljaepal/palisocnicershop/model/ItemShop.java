@@ -18,6 +18,19 @@ public class ItemShop implements Parcelable {
     private String mSubtotalTitle;
     private String mInitialSubtotal;
 
+    /**
+     * Constructor for the ItemShop object
+     * @param mItemTitle
+     * @param mItemImage
+     * @param mItemPrice
+     * @param mItemDescription
+     * @param mQuantityTitle
+     * @param mRemoveButton
+     * @param mItemQuantity
+     * @param mAddButton
+     * @param mSubtotalTitle
+     * @param mInitialSubtotal
+     */
     public ItemShop(String mItemTitle, int mItemImage, String mItemPrice, String mItemDescription,
                     String mQuantityTitle, String mRemoveButton, String mItemQuantity,
                     String mAddButton, String mSubtotalTitle, String mInitialSubtotal) {
@@ -119,6 +132,11 @@ public class ItemShop implements Parcelable {
         return 0;
     }
 
+    /**
+     * Write the data to the parcel
+     * @param parcel
+     * @param i
+     */
     @Override
     public void writeToParcel(Parcel parcel, int i) {
         parcel.writeString(this.mItemTitle);
@@ -133,6 +151,9 @@ public class ItemShop implements Parcelable {
         parcel.writeString(this.mInitialSubtotal);
     }
 
+    /**
+     * Instantiate the date from the parcel
+     */
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
         public ItemShop createFromParcel(Parcel in) {
             return new ItemShop(in);
@@ -143,7 +164,10 @@ public class ItemShop implements Parcelable {
         }
     };
 
-    // Parcelling part
+    /**
+     * Parcel the variables
+     * @param in
+     */
     public ItemShop(Parcel in){
         this.mItemTitle = in.readString();
         this.mItemImage = in.readInt();

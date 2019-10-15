@@ -58,4 +58,9 @@
     <string name="ok">Checkout</string>
     <string name="cancel">Back</string>
     <string name="delivery_title">Delivery fee:</string>
+
+    <string name="action_contact">Contact</string>
+    <string name="action_order">Order</string>
+    <string name="action_status">Status</string>
+    <string name="action_account">My Account</string>
 </resources>

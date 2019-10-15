@@ -105,6 +105,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.
             currentSubtotal = Double.parseDouble(clickedItem.getmInitialSubtotal());
             currentPrice = Double.parseDouble(clickedItem.getmItemPrice());
 
+            // Depending on which button was clicked on, add or remove an item
             switch (view.getId()) {
                 case R.id.item_remove:
                     if (currentQuantity > 0) {
@@ -126,8 +127,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.
                     Log.d(LOG_TAG, "Update the quantity:  " + clickedItem.getmItemTitle() + ", "
                             + clickedItem.getmItemPrice());
                     break;
-
-                default :
             }
 
             mItemList.set(mPosition, clickedItem);
